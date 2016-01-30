@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="weight"
+        android:title="@string/weight"
+        android:defaultValue="150"
+        android:inputType="number"
+        android:id="@+id/weight_pref"
+        />
+</PreferenceScreen>

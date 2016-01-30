@@ -2,8 +2,10 @@ package org.haojun.crunchtime;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -42,7 +44,6 @@ public class KnownCalorieFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        HashMap<String, Double> converterDic = new HashMap<>();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(
                     getContext().getResources().getAssets().open("activity_calorie")));
@@ -50,13 +51,15 @@ public class KnownCalorieFragment extends Fragment {
             while (line != null) {
                 String[] data = line.split(",");
                 this._unitDic.put(data[0], data[1]);
-                converterDic.put(data[0], Double.parseDouble(data[2]));
+                _converterDic.put(data[0], Double.parseDouble(data[2]));
                 line = reader.readLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        _converter = new Converter(_weight, converterDic);
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        _weight = Integer.parseInt(pref.getString("weight", "150"));
+        _converter = new Converter(_weight, _converterDic);
         _activitiesList.addAll(_unitDic.keySet());
         for (int i = 0; i < _activitiesList.size(); i++) {
             int convertedCal = 0;
@@ -91,6 +94,20 @@ public class KnownCalorieFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
         });
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
+        _preferenceListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                                  String key) {
+                _weight = Integer.parseInt(sharedPreferences.getString(key, "150"));
+                _converter = new Converter(_weight, _converterDic);
+                int reps = num.length() > 0 ?
+                        Integer.parseInt(num.getText().toString()) : 0;
+                updateAll(reps);
+                activityAdapter.notifyDataSetChanged();
+            }
+        };
+        pref.registerOnSharedPreferenceChangeListener(_preferenceListener);
         return _rootView;
     }
 
@@ -142,6 +159,8 @@ public class KnownCalorieFragment extends Fragment {
     private final HashMap<String, String> _unitDic = new HashMap<>();
     private final List<String> _activitiesList = new ArrayList<>();
     private final List<String> _convertedList = new ArrayList<>();
+    private SharedPreferences.OnSharedPreferenceChangeListener _preferenceListener;
+    HashMap<String, Double> _converterDic = new HashMap<>();
     private int _weight = 150;
     private Converter _converter;
     private View _rootView;

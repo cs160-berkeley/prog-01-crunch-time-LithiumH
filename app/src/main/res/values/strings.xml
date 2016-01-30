@@ -6,4 +6,7 @@
     <string name="i_did">I did</string>
     <string name="i_want">I want to burn</string>
     <string name="calories">Calories</string>
+    <string name="title_activity_preference">SettingActivity</string>
+    <string name="weight">Weight in lb.</string>
+    <string name="weight_default">150</string>
 </resources>
