@@ -44,7 +44,7 @@ public class Converter {
       * @param activity -- the activity we want to convert to
       * @return the reps or mins we need to complete the ACTIVITY to achieve CAL
       */
-    int toUnit(int cal, String activity) {
+    int toUnit(double cal, String activity) {
         double calPerUnit = this._activities.get(activity);
         return (int) Math.round(cal / (this._weight * 0.453592 * calPerUnit));
     }
