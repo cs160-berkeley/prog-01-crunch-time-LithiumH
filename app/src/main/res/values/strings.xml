@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Crunch Time</string>
     <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_amount">100</string>
+    <string name="hint_calories">50</string>
+    <string name="i_did">I did</string>
+    <string name="i_want">I want to burn</string>
+    <string name="calories">Calories</string>
 </resources>

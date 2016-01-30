@@ -30,18 +30,34 @@ import java.util.List;
  */
 public class KnownAmountFragment extends Fragment {
 
-    public KnownAmountFragment() {
-        // Required empty public constructor
-    }
+    public KnownAmountFragment() { }
 
+    public void setArguments(Bundle args) {
+        _weight = args.getInt("weight") > 0? args.getInt("weight") : 150;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        HashMap<String, Double> converterDic = new HashMap<>();
         try {
-            initiate(150, getContext().getResources().getAssets().open("activity_calorie"));
-        } catch (IOException e){
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    getContext().getResources().getAssets().open("activity_calorie")));
+            String line = reader.readLine();
+            while (line != null) {
+                String[] data = line.split(",");
+                this._unitDic.put(data[0], data[1]);
+                converterDic.put(data[0], Double.parseDouble(data[2]));
+                line = reader.readLine();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
+        }
+        _converter = new Converter(_weight, converterDic);
+        _activitiesList.addAll(_unitDic.keySet());
+        for (int i = 0; i < _activitiesList.size(); i++) {
+            int convertedCal = 0;
+            _convertedList.add(String.format("%d", convertedCal));
         }
     }
 
@@ -51,8 +67,8 @@ public class KnownAmountFragment extends Fragment {
         _rootView = inflater.inflate(R.layout.known_amount_fragment, container, false);
         // Selecting all Widgets
         final Spinner spinner = (Spinner) _rootView.findViewById(R.id.activity_spinner);
-        final EditText num = (EditText) _rootView.findViewById(R.id.num);
-        final ListView activities = (ListView) _rootView.findViewById(R.id.activity_list);
+        final EditText num = (EditText) _rootView.findViewById(R.id.amount_num);
+        final ListView activities = (ListView) _rootView.findViewById(R.id.activity_list_amount);
 
         // Setting Adapters
         spinner.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item,
@@ -85,15 +101,6 @@ public class KnownAmountFragment extends Fragment {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
-
-        // FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        // fab.setOnClickListener(new View.OnClickListener() {
-        //     @Override
-        //     public void onClick(View view) {
-        //         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        //                 .setAction("Action", null).show();
-        //     }
-        // });
         return _rootView;
     }
 
@@ -104,14 +111,14 @@ public class KnownAmountFragment extends Fragment {
     private void updateCalorie(int num, String activity) {
         double calorie = _converter.toCalorie(num, activity);
         TextView cal = (TextView) _rootView.findViewById(R.id.cal);
-        cal.setText(String.format("%f",calorie));
+        cal.setText(String.format("%f", calorie));
     }
 
     /** Ths method updates the unit given an activity.
      *  @param activity -- the activity user was doing.
      */
     private void updateUnit(String activity) {
-        TextView unit = (TextView) _rootView.findViewById(R.id.unit);
+        TextView unit = (TextView) _rootView.findViewById(R.id.amount_unit);
         unit.setText(_unitDic.get(activity));
     }
 
@@ -125,33 +132,6 @@ public class KnownAmountFragment extends Fragment {
             double calorie = _converter.toCalorie(num, activity);
             int reps = _converter.toUnit(calorie, _activitiesList.get(i));
             _convertedList.set(i, String.format("%d", reps));
-        }
-    }
-
-    /** This is the method that reads the configuration file and creates 2
-     * database of activity/min(reps)/kg converter. One for the converter one
-     * for the unit (reps/min) conversion.
-     * @param stream -- the input stream of the configuration file.
-     */
-    private void initiate(int weight, InputStream stream) {
-        HashMap<String, Double> converterDic = new HashMap<>();
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-            String line = reader.readLine();
-            while (line != null) {
-                String[] data = line.split(",");
-                this._unitDic.put(data[0], data[1]);
-                converterDic.put(data[0], Double.parseDouble(data[2]));
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        _converter = new Converter(weight, converterDic);
-        _activitiesList.addAll(_unitDic.keySet());
-        for (String activity : _activitiesList) {
-            int convertedCal = 0; // TODO
-            _convertedList.add(String.format("%d", convertedCal));
         }
     }
 
@@ -171,9 +151,11 @@ public class KnownAmountFragment extends Fragment {
             if (activity != null) {
                 TextView name = (TextView) convertView.findViewById(R.id.activity_name);
                 TextView calorie = (TextView) convertView.findViewById(R.id.activity_calorie);
-                if (name != null && calorie != null) {
+                TextView unit = (TextView) convertView.findViewById(R.id.unit);
+                if (name != null && calorie != null && unit != null) {
                     name.setText(activity);
                     calorie.setText(_convertedList.get(pos));
+                    unit.setText(_unitDic.get(activity));
                     int dark = Color.rgb(0x8C, 0x46, 0x46);
                     int light = Color.rgb(0xF2, 0xAE, 0x72);
                     convertView.setBackgroundColor(pos % 2 == 0 ? light : dark);
@@ -186,9 +168,11 @@ public class KnownAmountFragment extends Fragment {
 
         private int _resource;
     }
+
     private final HashMap<String, String> _unitDic = new HashMap<>();
     private final List<String> _activitiesList = new ArrayList<>();
     private final List<String> _convertedList = new ArrayList<>();
+    private int _weight = 150;
     private Converter _converter;
     private View _rootView;
 }

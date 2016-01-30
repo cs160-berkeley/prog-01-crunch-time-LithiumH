@@ -43,12 +43,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) { }
         });
-//        if (savedInstanceState == null) {
-//            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.container, new KnownAmountFragment())
-//                    .commit();
-//        }
-
     }
 
     @Override
