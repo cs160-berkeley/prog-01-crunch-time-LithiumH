@@ -16,11 +16,11 @@ See [your demo video title here] (https://link_to_your_video)
 
 ## Screenshots
 
-<img src="screenshots/shot1.png" height="400" alt="Screenshot"/>
-<img src="screenshots/shot2.png" height="400" alt="Screenshot"/>
-<img src="screenshots/shot3.png" height="400" alt="Screenshot"/>
-<img src="screenshots/shot4.png" height="400" alt="Screenshot"/>
-<img src="screenshots/shot5.png" height="400" alt="Screenshot"/>
+<img src="images/shot1.png" height="400" alt="Screenshot"/>
+<img src="images/shot2.png" height="400" alt="Screenshot"/>
+<img src="images/shot3.png" height="400" alt="Screenshot"/>
+<img src="images/shot4.png" height="400" alt="Screenshot"/>
+<img src="images/shot5.png" height="400" alt="Screenshot"/>
 
 ## Acknowledgments
 <div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a>, <a href="http://www.flaticon.com/authors/scott-de-jonge" title="Scott de Jonge">Scott de Jonge</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
