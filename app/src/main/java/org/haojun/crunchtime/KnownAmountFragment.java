@@ -1,11 +1,7 @@
 package org.haojun.crunchtime;
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -22,12 +18,10 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,8 +47,8 @@ public class KnownAmountFragment extends Fragment {
             e.printStackTrace();
         }
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        _weight = Integer.parseInt(pref.getString("weight", "150"));
-        _converter = new Converter(_weight, _converterDic);
+        int weight = Integer.parseInt(pref.getString("weight", "150"));
+        _converter = new Converter(weight, _converterDic);
         _activitiesList.addAll(_unitDic.keySet());
         for (int i = 0; i < _activitiesList.size(); i++) {
             int convertedCal = 0;
@@ -72,11 +66,11 @@ public class KnownAmountFragment extends Fragment {
         final ListView activities = (ListView) _rootView.findViewById(R.id.activity_list_amount);
 
         // Setting Adapters
+        final ActivityAdapter activityAdapter = new ActivityAdapter(getContext(),
+                R.layout.list_item_activity, _convertedList, _activitiesList, _unitDic);
+        activities.setAdapter(activityAdapter);
         spinner.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item,
                 R.id.spinner_item_textview, new ArrayList<>(_activitiesList)));
-        final ActivityAdapter activityAdapter = new ActivityAdapter(getContext(),
-                R.layout.list_item_activity);
-        activities.setAdapter(activityAdapter);
 
         // Setting Listeners
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -109,12 +103,13 @@ public class KnownAmountFragment extends Fragment {
             }
         });
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getContext());
-        _preferenceListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        _preferenceListener =
+                new SharedPreferences.OnSharedPreferenceChangeListener() {
                 @Override
                 public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                         String key) {
-                    _weight = Integer.parseInt(sharedPreferences.getString(key, "150"));
-                    _converter = new Converter(_weight, _converterDic);
+                    int weight = Integer.parseInt(sharedPreferences.getString(key, "150"));
+                    _converter = new Converter(weight, _converterDic);
                     String selection = spinner.getSelectedItem().toString();
                     int reps = num.length() > 0 ?
                             Integer.parseInt(num.getText().toString()) : 0;
@@ -158,46 +153,11 @@ public class KnownAmountFragment extends Fragment {
         }
     }
 
-    private class ActivityAdapter extends ArrayAdapter<String> {
-        public ActivityAdapter(Context context, int resource) {
-            super(context, resource, _convertedList);
-            this._resource = resource;
-        }
-
-        public View getView(int pos, View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
-                        Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(this._resource, parent, false);
-            }
-            String activity = _activitiesList.get(pos);
-            if (activity != null) {
-                TextView name = (TextView) convertView.findViewById(R.id.activity_name);
-                TextView calorie = (TextView) convertView.findViewById(R.id.activity_calorie);
-                TextView unit = (TextView) convertView.findViewById(R.id.unit);
-                if (name != null && calorie != null && unit != null) {
-                    name.setText(activity);
-                    calorie.setText(_convertedList.get(pos));
-                    unit.setText(_unitDic.get(activity));
-                    int dark = Color.rgb(0x8C, 0x46, 0x46);
-                    int light = Color.rgb(0xF2, 0xAE, 0x72);
-                    convertView.setBackgroundColor(pos % 2 == 0 ? light : dark);
-                    name.setTextColor(pos % 2 == 0 ? dark : light);
-                    calorie.setTextColor(pos % 2 == 0 ? dark : light);
-                }
-            }
-            return convertView;
-        }
-
-        private int _resource;
-    }
-
-    final HashMap<String, Double> _converterDic = new HashMap<>();
-    private final HashMap<String, String> _unitDic = new HashMap<>();
-    private final List<String> _activitiesList = new ArrayList<>();
-    private final List<String> _convertedList = new ArrayList<>();
     private SharedPreferences.OnSharedPreferenceChangeListener _preferenceListener;
-    private int _weight = 150;
+    private HashMap<String, Double> _converterDic = new HashMap<>();
+    private HashMap<String, String> _unitDic = new HashMap<>();
+    private List<String> _activitiesList = new ArrayList<>();
+    private List<String> _convertedList = new ArrayList<>();
     private Converter _converter;
     private View _rootView;
 }
