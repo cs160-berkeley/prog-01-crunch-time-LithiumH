@@ -41,6 +41,7 @@ public class KnownAmountFragment extends Fragment {
                 String[] data = line.split(",");
                 this._unitDic.put(data[0], data[1]);
                 _converterDic.put(data[0], Double.parseDouble(data[2]));
+                _iconSrc.put(data[0], data[3]);
                 line = reader.readLine();
             }
         } catch (IOException e) {
@@ -67,7 +68,8 @@ public class KnownAmountFragment extends Fragment {
 
         // Setting Adapters
         final ActivityAdapter activityAdapter = new ActivityAdapter(getContext(),
-                R.layout.list_item_activity, _convertedList, _activitiesList, _unitDic);
+                R.layout.list_item_activity, _convertedList, _activitiesList, _unitDic,
+                _iconSrc);
         activities.setAdapter(activityAdapter);
         spinner.setAdapter(new ArrayAdapter<>(getContext(), R.layout.spinner_item,
                 R.id.spinner_item_textview, new ArrayList<>(_activitiesList)));
@@ -156,6 +158,7 @@ public class KnownAmountFragment extends Fragment {
     private SharedPreferences.OnSharedPreferenceChangeListener _preferenceListener;
     private HashMap<String, Double> _converterDic = new HashMap<>();
     private HashMap<String, String> _unitDic = new HashMap<>();
+    private HashMap<String, String> _iconSrc = new HashMap<>();
     private List<String> _activitiesList = new ArrayList<>();
     private List<String> _convertedList = new ArrayList<>();
     private Converter _converter;

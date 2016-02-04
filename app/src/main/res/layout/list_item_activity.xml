@@ -2,12 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?android:listPreferredItemHeight">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="0dp"
+        android:layout_alignParentStart="true"
+        android:id="@+id/list_item_icon"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
+        android:layout_toEndOf="@id/list_item_icon"
+        android:paddingLeft="10dp"
+        android:paddingRight="0dp"
         android:textSize="18sp"
         android:gravity="center_vertical"
         android:id="@+id/activity_name"/>
