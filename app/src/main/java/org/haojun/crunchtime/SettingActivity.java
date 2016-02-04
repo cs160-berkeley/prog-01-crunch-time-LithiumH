@@ -14,6 +14,8 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.settings);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle("Settings");
         getFragmentManager().beginTransaction()
                 .add(R.id.settings_container, new SettingFragment())
                 .commit();
