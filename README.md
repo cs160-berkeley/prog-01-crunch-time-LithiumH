@@ -23,4 +23,4 @@ See [your demo video title here] (https://link_to_your_video)
 <img src="screenshots/shot5.png" height="400" alt="Screenshot"/>
 
 ## Acknowledgments
-
+<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a>, <a href="http://www.flaticon.com/authors/scott-de-jonge" title="Scott de Jonge">Scott de Jonge</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
