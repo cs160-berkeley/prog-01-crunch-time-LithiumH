@@ -12,7 +12,7 @@ Haojun Li ([haojun.li@berkeley.edu](mailto:your_email@berkeley.edu))
 
 ## Demo Video
 
-See [your demo video title here] (https://link_to_your_video)
+See [project 1 video] (https://www.youtube.com/watch?v=F6yal5gOfdc)
 
 ## Screenshots
 

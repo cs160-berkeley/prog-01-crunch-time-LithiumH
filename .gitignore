@@ -35,3 +35,6 @@ captures/
 *.pdf
 *.out
 *.log
+
+# Ignore video files
+*.mov
